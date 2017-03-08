@@ -1,0 +1,19 @@
+{
+  "name": "android-cli",
+  "version": "1.0.0",
+  "description": "Inspired to angular cli",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/endlessdev/android-cli.git"
+  },
+  "author": "Jade Yeom",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/endlessdev/android-cli/issues"
+  },
+  "homepage": "https://github.com/endlessdev/android-cli#readme"
+}
