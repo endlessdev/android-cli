@@ -2,7 +2,7 @@
  * @author Jade Yeom
  * @email ysw0094@gmail.com
  */
-var commander = require('commander'), fs = require('fs'), chalk = require('chalk'), inquirer = require('inquirer');
+var commander = require('commander'), fs = require('fs'), path = require('path'), chalk = require('chalk'), walk = require('walk'), inquirer = require('inquirer'), xml2js = require('xml2js');
 commander.arguments('<name>')
     .version('0.0.1')
     .option('-g, --generate [name]', 'component (e.g activity, fragment etc..)')
@@ -15,23 +15,27 @@ commander.arguments('<name>')
         console.log(commander.generate, name);
         switch (commander.generate) {
             case "activity":
-                var questions = [{
-                        type: 'list',
-                        name: 'package',
-                        message: "Choose your target package path",
-                        //TODO ADD JAVA PACKAGE PARSED PATH LIST
-                        choices: ['foo', 'bar']
-                    }];
-                inquirer.prompt(questions).then(function (answers) {
-                    console.log(JSON.stringify(answers));
-                    var path = answers.pacakge;
-                    fs.readFile('./fileContents.js', 'utf-8', function (err, data) {
-                        var parsedData = JSON.parse(data);
-                        fs.writeFile(path, parsedData[0].content, function (err) {
-                            if (!err)
-                                console.log(chalk.cyan.bgwhite.bold("Successful generated files :"));
-                            else
-                                console.log(chalk.read.bgblack.bold("ERR" + err));
+                getApplicationPackage(function (pacakge) {
+                    getPackages(pacakge, function (packageList) {
+                        var questions = [{
+                                type: 'list',
+                                name: 'package',
+                                message: "Choose your target package path",
+                                // TODO ADD JAVA PACKAGE PARSED PATH LIST
+                                choices: packageList
+                            }];
+                        inquirer.prompt(questions).then(function (answers) {
+                            console.log(JSON.stringify(answers));
+                            // let path: string = answers.pacakge;
+                            // fs.readFile('./fileContents.js', 'utf-8', function (err, data) {
+                            //     let parsedData: any[] = JSON.parse(data);
+                            //     fs.writeFile(path, parsedData.['activity'].content, function (err) {
+                            //         if (!err)
+                            //             console.log(chalk.cyan.bgwhite.bold("Successful generated files :"));
+                            //         else
+                            //             console.log(chalk.red.bgblack.bold("ERR" + err));
+                            //     })
+                            // });
                         });
                     });
                 });
@@ -39,4 +43,27 @@ commander.arguments('<name>')
         }
     }
 }).parse(process.argv);
-//# sourceMappingURL=app.js.map
+function getApplicationPackage(callback) {
+    var manifestContent = fs.readFileSync('./AndroidManifest.xml');
+    var parser = new xml2js.Parser();
+    parser.parseString(manifestContent, function (err, result) {
+        callback(result.manifest.$.package);
+    });
+}
+function getPackages(packageName, callback) {
+    var packageList = [];
+    var options = {
+        followLinks: false
+    };
+    var walker = walk.walk("/tmp", options);
+    walker.on("directories", function (root, dirStatsArray, next) {
+        for (var _i = 0, dirStatsArray_1 = dirStatsArray; _i < dirStatsArray_1.length; _i++) {
+            var dir = dirStatsArray_1[_i];
+            packageList.push(dir.name);
+        }
+        next();
+    });
+    walker.on("end", function () {
+        callback(packageList.map(function (value) { return packageName + "." + value; }));
+    });
+}
