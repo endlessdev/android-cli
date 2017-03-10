@@ -2,7 +2,7 @@
  * @author Jade Yeom
  * @email ysw0094@gmail.com
  */
-var commander = require('commander'), fs = require('fs'), path = require('path'), chalk = require('chalk'), walk = require('walk'), inquirer = require('inquirer'), xml2js = require('xml2js');
+var commander = require('commander'), fs = require('fs'), path = require('path'), chalk = require('chalk'), walk = require('walk'), inquirer = require('inquirer'), xml2js = require('xml2js'), changeCase = require('change-case');
 commander.arguments('<name>')
     .version('0.0.1')
     .option('-g, --generate [name]', 'component (e.g activity, fragment etc..)')
@@ -25,17 +25,27 @@ commander.arguments('<name>')
                                 choices: packageList
                             }];
                         inquirer.prompt(questions).then(function (answers) {
-                            console.log(JSON.stringify(answers));
-                            // let path: string = answers.pacakge;
-                            // fs.readFile('./fileContents.js', 'utf-8', function (err, data) {
-                            //     let parsedData: any[] = JSON.parse(data);
-                            //     fs.writeFile(path, parsedData.['activity'].content, function (err) {
-                            //         if (!err)
-                            //             console.log(chalk.cyan.bgwhite.bold("Successful generated files :"));
-                            //         else
-                            //             console.log(chalk.red.bgblack.bold("ERR" + err));
-                            //     })
-                            // });
+                            var selectedPackage = answers.package;
+                            var javaContent = fs.readFileSync('./boilerplates/activity/activity.ac.java', 'utf-8').toString();
+                            var xmlContent = fs.readFileSync('./boilerplates/activity/activity_layout.ac.xml', 'utf-8').toString();
+                            var parsedJavaContent = renderAcFile(javaContent, selectedPackage, name);
+                            var parsedXMLContent = renderAcFile(xmlContent, selectedPackage, name);
+                            try {
+                                fs.writeFileSync(changeCase.pascalCase(name) + "Activity.java", parsedJavaContent);
+                                console.log(chalk.green("Successful generate activity " + changeCase.pascalCase(name) + "Activity.java"));
+                            }
+                            catch (err) {
+                                console.log(chalk.red("Failed to generate activity " + changeCase.pascalCase(name) + "Activity.java"));
+                                console.log(chalk.red(err));
+                            }
+                            try {
+                                fs.writeFileSync("activity_" + changeCase.lowerCase(name) + ".xml", parsedXMLContent);
+                                console.log(chalk.green("Successful generate layout file activity_" + changeCase.lowerCase(name) + ".xml!"));
+                            }
+                            catch (err) {
+                                console.log(chalk.red("Failed to generate layout file activity_" + changeCase.lowerCase(name) + ".xml!"));
+                                console.log(chalk.red(err));
+                            }
                         });
                     });
                 });
@@ -44,6 +54,7 @@ commander.arguments('<name>')
     }
 }).parse(process.argv);
 function getApplicationPackage(callback) {
+    // TODO GET REAL PATH
     var manifestContent = fs.readFileSync('./AndroidManifest.xml');
     var parser = new xml2js.Parser();
     parser.parseString(manifestContent, function (err, result) {
@@ -55,6 +66,7 @@ function getPackages(packageName, callback) {
     var options = {
         followLinks: false
     };
+    // TODO GET REAL PATH
     var walker = walk.walk("/tmp", options);
     walker.on("directories", function (root, dirStatsArray, next) {
         for (var _i = 0, dirStatsArray_1 = dirStatsArray; _i < dirStatsArray_1.length; _i++) {
@@ -66,4 +78,10 @@ function getPackages(packageName, callback) {
     walker.on("end", function () {
         callback(packageList.map(function (value) { return packageName + "." + value; }));
     });
+}
+function renderAcFile(fileContent, pkgName, activityName) {
+    return fileContent
+        .replace(/{%packageName%}/gi, pkgName)
+        .replace(/{%activityName%}/gi, changeCase.pascalCase(activityName))
+        .replace(/{%activityNameLowerCase%}/gi, changeCase.lowerCase(activityName));
 }
