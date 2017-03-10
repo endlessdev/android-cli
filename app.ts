@@ -18,7 +18,7 @@ commander.arguments('<name>')
     .version('0.0.1')
     .option('-g, --generate [name]', 'component (e.g activity, fragment etc..)')
     .option('--adb-reset', 'kill server adb (required environment variable for ADB_PATH)')
-    .action(function (name: string) {
+    .action((name: string) => {
         console.log(chalk.cyan("================================="));
         console.log(chalk.cyan("Welcome to Android CLI TOOL 0.0.1"));
         console.log(chalk.cyan("================================="));
@@ -26,8 +26,8 @@ commander.arguments('<name>')
             console.log(commander.generate, name);
             switch (commander.generate) {
                 case "activity":
-                    getApplicationPackage(function (pacakge) {
-                        getPackages(pacakge, function (packageList) {
+                    getApplicationPackage(pacakge => {
+                        getPackages(pacakge, packageList => {
                             let questions = [{
                                 type: 'list',
                                 name: 'package',
@@ -35,7 +35,7 @@ commander.arguments('<name>')
                                 // TODO ADD JAVA PACKAGE PARSED PATH LIST
                                 choices: packageList,
                             }];
-                            inquirer.prompt(questions).then(function (answers) {
+                            inquirer.prompt(questions).then(answers => {
 
                                 let selectedPackage = answers.package;
 
@@ -75,7 +75,7 @@ function getApplicationPackage(callback) {
     let manifestContent: string = fs.readFileSync('./AndroidManifest.xml');
     let parser = new xml2js.Parser();
 
-    parser.parseString(manifestContent, function (err, result) {
+    parser.parseString(manifestContent, (err, result) => {
         callback(result.manifest.$.package);
     });
 }
@@ -90,15 +90,15 @@ function getPackages(packageName, callback) {
     // TODO GET REAL PATH
     let walker = walk.walk("/tmp", options);
 
-    walker.on("directories", function (root, dirStatsArray, next) {
+    walker.on("directories", (root, dirStatsArray, next) => {
         for (let dir of dirStatsArray) {
             packageList.push(dir.name)
         }
         next();
     });
 
-    walker.on("end", function () {
-        callback(packageList.map(function (value) { return `${packageName}.${value}` }));
+    walker.on("end", () => {
+        callback(packageList.map(value => { return `${packageName}.${value}` }));
     });
 }
 
