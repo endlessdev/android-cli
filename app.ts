@@ -20,8 +20,6 @@ commander.arguments('<name>')
     .option('--adb-reset', 'kill server adb (required environment variable for ADB_PATH)')
     .action((name: string) => {
 
-        let javaContent: string;
-        let xmlContent: string
         let selectedPackage: string;
         let parsedJavaContent: string;
         let parsedXMLContent: string;
@@ -42,55 +40,7 @@ commander.arguments('<name>')
                         choices: packageList,
                     }];
                     inquirer.prompt(questions).then(answers => {
-
-                        javaContent = fs.readFileSync(`./boilerplates/${commander.generate}/${commander.generate}.ac.java`, 'utf-8').toString()
-                        xmlContent = fs.readFileSync(`./boilerplates/${commander.generate}/${commander.generate}_layout.ac.xml`, 'utf-8').toString()
-
-                        parsedJavaContent = renderAcFile(javaContent, selectedPackage, name);
-                        parsedXMLContent = renderAcFile(xmlContent, selectedPackage, name);
-
-                        switch (commander.generate) {
-                            case "activity":
-
-                                try {
-                                    fs.writeFileSync(`${changeCase.pascalCase(name)}Activity.java`, parsedJavaContent);
-                                    console.log(chalk.green(`Successful generate activity ${changeCase.pascalCase(name)}Activity.java`))
-                                } catch (err) {
-                                    console.log(chalk.red(`Failed to generate activity ${changeCase.pascalCase(name)}Activity.java`))
-                                    console.log(chalk.red(err))
-                                }
-
-                                try {
-                                    fs.writeFileSync(`activity_${changeCase.lowerCase(name)}.xml`, parsedXMLContent);
-                                    console.log(chalk.green(`Successful generate layout file activity_${changeCase.lowerCase(name)}.xml!`))
-                                } catch (err) {
-                                    console.log(chalk.red(`Failed to generate layout file activity_${changeCase.lowerCase(name)}.xml!`))
-                                    console.log(chalk.red(err))
-                                }
-
-                                break;
-
-                            case "fragment":
-
-                                try {
-                                    fs.writeFileSync(`${changeCase.pascalCase(name)}Fragment.java`, parsedJavaContent);
-                                    console.log(chalk.green(`Successful generate fragment ${changeCase.pascalCase(name)}Fragment.java`))
-                                } catch (err) {
-                                    console.log(chalk.red(`Failed to generate fragment ${changeCase.pascalCase(name)}Fragment.java`))
-                                    console.log(chalk.red(err))
-                                }
-
-                                try {
-                                    fs.writeFileSync(`activity_${changeCase.lowerCase(name)}.xml`, parsedXMLContent);
-                                    console.log(chalk.green(`Successful generate layout file fragment_${changeCase.lowerCase(name)}.xml!`))
-                                } catch (err) {
-                                    console.log(chalk.red(`Failed to generate layout file fragment_${changeCase.lowerCase(name)}.xml!`))
-                                    console.log(chalk.red(err))
-                                }
-
-                                break;
-                        }
-
+                        generateRenderedOutFile(commander.generate, name, selectedPackage);
                     });
                 });
             });
@@ -135,6 +85,39 @@ function renderAcFile(fileContent: string, pkgName: string, activityName: string
         .replace(/{%packageName%}/gi, pkgName)
         .replace(/{%activityName%}/gi, changeCase.pascalCase(activityName))
         .replace(/{%activityNameLowerCase%}/gi, changeCase.lowerCase(activityName));
+}
+
+function generateRenderedOutFile(componentType: string, componentName: string, targetPkg: string) {
+
+    let boilerplatesPath = `./boilerplates/${componentType}`;
+    let boilerplateNameOfJAVA =  `${componentType}.ac.java`
+    let boilerplateNameOfXML =  `${componentType}_layout.ac.xml`
+
+    let javaFileName: string = `${changeCase.pascalCase(componentName)}${changeCase.pascalCase(componentType)}.java`;
+    let xmlFileName: string = `${changeCase.lowerCase(componentType)}_${changeCase.lowerCase(componentName)}.xml`;
+
+    let javaContent: string = fs.readFileSync(`${boilerplatesPath}/${boilerplateNameOfJAVA}`, 'utf-8').toString();
+    let xmlContent: string = fs.readFileSync(`${boilerplatesPath}/${boilerplateNameOfXML}`, 'utf-8').toString();
+
+    let parsedJavaContent: string = renderAcFile(javaContent, targetPkg, componentName);
+    let parsedXMLContent: string = renderAcFile(xmlContent, targetPkg, componentName);
+
+    try {
+        fs.writeFileSync(javaFileName, parsedJavaContent);
+        console.log(chalk.green(`Successful generate ${componentType} ${javaFileName}`))
+    } catch (err) {
+        console.log(chalk.red(`Failed to generate ${componentType} ${javaFileName}`))
+        console.log(chalk.red(err))
+    }
+
+    try {
+        fs.writeFileSync(`${xmlFileName}`/*TODO GET REAL PATH*/, parsedXMLContent);
+        console.log(chalk.green(`Successful generate layout file ${xmlFileName}`))
+    } catch (err) {
+        console.log(chalk.red(`Failed to generate layout file ${xmlFileName}`))
+        console.log(chalk.red(err))
+    }
+
 }
 
 function presentInitialMessage() {
