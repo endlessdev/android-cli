@@ -48,6 +48,12 @@ commander.arguments('<name>')
     }).parse(process.argv);
 
 
+
+/**
+ * @desc Parse package name by AndroidManifest.xml
+ * 
+ * @param {function} callback - Call anonymous function when complete xml parse
+ */
 function getApplicationPackage(callback) {
     // TODO GET REAL PATH
     let manifestContent: string = fs.readFileSync('./AndroidManifest.xml');
@@ -58,6 +64,12 @@ function getApplicationPackage(callback) {
     });
 }
 
+/**
+ * @desc Parse package name list by walk module
+ * 
+ * @param {string} packageName - Name of targeted package name
+ * @param {function} callback - Call anonymous function when walker had end event
+ */
 function getPackages(packageName, callback) {
     let packageList = [];
 
@@ -80,18 +92,34 @@ function getPackages(packageName, callback) {
     });
 }
 
-function renderAcFile(fileContent: string, pkgName: string, activityName: string) {
+/**
+ * @desc Render boilerplate file by our specific format
+ * 
+ * @param {string} fileContent - Content of boilerplate file
+ * @param {string} pkgName - Targeted package name
+ * @param {string} componentName - Name of componentName
+ * 
+ * @return {string} - Content of rendered file
+ */
+function renderAcFile(fileContent: string, pkgName: string, componentName: string) {
     return fileContent
         .replace(/{%packageName%}/gi, pkgName)
-        .replace(/{%activityName%}/gi, changeCase.pascalCase(activityName))
-        .replace(/{%activityNameLowerCase%}/gi, changeCase.lowerCase(activityName));
+        .replace(/{%activityName%}/gi, changeCase.pascalCase(componentName))
+        .replace(/{%activityNameLowerCase%}/gi, changeCase.lowerCase(componentName));
 }
 
+/**
+ * @desc Generate rendered out file
+ * 
+ * @param {string} componentType - Type of component
+ * @param {string} componentName - Name of component
+ * @param {string} targetPkg - Targeted package name
+ */
 function generateRenderedOutFile(componentType: string, componentName: string, targetPkg: string) {
 
     let boilerplatesPath = `./boilerplates/${componentType}`;
-    let boilerplateNameOfJAVA =  `${componentType}.ac.java`
-    let boilerplateNameOfXML =  `${componentType}_layout.ac.xml`
+    let boilerplateNameOfJAVA = `${componentType}.ac.java`
+    let boilerplateNameOfXML = `${componentType}_layout.ac.xml`
 
     let javaFileName: string = `${changeCase.pascalCase(componentName)}${changeCase.pascalCase(componentType)}.java`;
     let xmlFileName: string = `${changeCase.lowerCase(componentType)}_${changeCase.lowerCase(componentName)}.xml`;
@@ -120,6 +148,9 @@ function generateRenderedOutFile(componentType: string, componentName: string, t
 
 }
 
+/**
+ * @desc Just present initial message
+ */
 function presentInitialMessage() {
     console.log(chalk.cyan("================================="));
     console.log(chalk.cyan("Welcome to Android CLI TOOL 0.0.1"));
