@@ -1,5 +1,8 @@
 # android-cli
 
+
+[![Build Status](https://api.travis-ci.org/endlessdev/android-cli.svg?branch=master)](https://travis-ci.org/endlessdev/android-cli)
+
 CLI for android applications
 
 ## Usage
