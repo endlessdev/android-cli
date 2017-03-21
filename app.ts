@@ -56,7 +56,7 @@ commander.arguments('<name>')
  */
 function getApplicationPackage(callback) {
     // TODO GET REAL PATH
-    let manifestContent: string = fs.readFileSync('./AndroidManifest.xml');
+    let manifestContent: string = fs.readFileSync('./app/src/main/AndroidManifest.xml');
     let parser = new xml2js.Parser();
 
     parser.parseString(manifestContent, (err, result) => {
@@ -77,18 +77,25 @@ function getPackages(packageName, callback) {
         followLinks: false
     };
 
+    packageList.push(packageName);
+
     // TODO GET REAL PATH
-    let walker = walk.walk("/tmp", options);
+    let walker = walk.walk(`./app/src/main/java/${packageName.replace(/\./gi, '/')}`, options);
 
     walker.on("directories", (root, dirStatsArray, next) => {
         for (let dir of dirStatsArray) {
-            packageList.push(dir.name)
+            packageList.push(root + "/" + dir.name.replace(/\//gi, "."));
         }
         next();
     });
 
     walker.on("end", () => {
-        callback(packageList.map(value => { return `${packageName}.${value}` }));
+        callback(packageList.map(value => {
+            return value
+                .replace('./app/src/main/java/', '')
+                .replace(/\//gi, '.')
+        }));
+        
     });
 }
 
