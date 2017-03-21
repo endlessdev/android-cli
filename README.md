@@ -38,3 +38,9 @@ $android -g fragment FRAGMENT_NAME
 >Successful generated activity [FRAGMENT_NAME]Fragment.java!
 >Successful generated activity layout file fragment_[FRAGMENT_NAME].xml!
 
+## Milestone
+
+- [ ] Get packages at java src path by work module
+- [ ] Parse AndroidManifest.xml and for add permission
+- [ ] Connect travis.ci to stick green passing image-!
+- [ ] Deploy this project to NPM (Node Package Manager)
