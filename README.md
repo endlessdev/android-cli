@@ -40,7 +40,7 @@ $android -g fragment FRAGMENT_NAME
 
 ## Milestone
 
-- [ ] Get packages at java src path by work module
+- [x] Get packages at java src path by work module
 - [ ] Parse AndroidManifest.xml and for add permission
 - [ ] Connect travis.ci to stick green passing image-!
 - [ ] Deploy this project to NPM (Node Package Manager)
