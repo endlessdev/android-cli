@@ -40,7 +40,7 @@ commander.arguments('<name>')
                         choices: packageList,
                     }];
                     inquirer.prompt(questions).then(answers => {
-                        generateRenderedOutFile(commander.generate, name, selectedPackage);
+                        generateRenderedOutFile(commander.generate, name, answers.package);
                     });
                 });
             });
@@ -79,7 +79,6 @@ function getPackages(packageName, callback) {
 
     packageList.push(packageName);
 
-    // TODO GET REAL PATH
     let walker = walk.walk(`./app/src/main/java/${packageName.replace(/\./gi, '/')}`, options);
 
     walker.on("directories", (root, dirStatsArray, next) => {
@@ -123,6 +122,10 @@ function renderAcFile(fileContent: string, pkgName: string, componentName: strin
  * @param {string} targetPkg - Targeted package name
  */
 function generateRenderedOutFile(componentType: string, componentName: string, targetPkg: string) {
+
+
+    console.log("generateRenderedOutFile");
+    console.log(componentType, componentName, targetPkg);
 
     let boilerplatesPath = `./boilerplates/${componentType}`;
     let boilerplateNameOfJAVA = `${componentType}.ac.java`
