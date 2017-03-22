@@ -123,10 +123,6 @@ function renderAcFile(fileContent: string, pkgName: string, componentName: strin
  */
 function generateRenderedOutFile(componentType: string, componentName: string, targetPkg: string) {
 
-
-    console.log("generateRenderedOutFile");
-    console.log(componentType, componentName, targetPkg);
-
     let boilerplatesPath = `./boilerplates/${componentType}`;
     let boilerplateNameOfJAVA = `${componentType}.ac.java`
     let boilerplateNameOfXML = `${componentType}_layout.ac.xml`
