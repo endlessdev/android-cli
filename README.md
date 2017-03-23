@@ -4,7 +4,7 @@
 
 
 [![Join Gitter chat][gitter-image]][gitter-url]
-[![Build Status](https://api.travis-ci.org/endlessdev/android-cli.svg?branch=master?style=flat-square)](https://travis-ci.org/endlessdev/android-cli)
+[![Build Status](https://api.travis-ci.org/endlessdev/android-cli.svg?branch=master&style=flat-square)](https://travis-ci.org/endlessdev/android-cli)
 [![npm Version][npm-image]][npm-url]
 
 CLI for android applications
@@ -16,7 +16,8 @@ android help
 
 ### Options
 <pre>
- -h, --help               output usage information
+ -h, --help               output usage infls
+ ormation
  -V, --version            output the version number
  -g, --generate [name]    component (e.g activity, fragment etc..)
  -p, --permission [name]  add uses-permission to manifest file(e.g INTERNET

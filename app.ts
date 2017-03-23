@@ -45,6 +45,8 @@ commander.arguments('<name>')
                     });
                 });
             });
+        } else if (commander.permisssion) {
+
         }
     }).parse(process.argv);
 
@@ -95,7 +97,7 @@ function getPackages(packageName, callback) {
                 .replace('./app/src/main/java/', '')
                 .replace(/\//gi, '.')
         }));
-        
+
     });
 }
 
@@ -146,7 +148,7 @@ function generateRenderedOutFile(componentType: string, componentName: string, t
     }
 
     try {
-        fs.writeFileSync(`${xmlFileName}`/*TODO GET REAL PATH*/, parsedXMLContent);
+        fs.writeFileSync(`./app/src/main/res/layout/${xmlFileName}`/*TODO GET REAL PATH*/, parsedXMLContent);
         console.log(chalk.green(`Successful generate layout file ${xmlFileName}`))
     } catch (err) {
         console.log(chalk.red(`Failed to generate layout file ${xmlFileName}`))
