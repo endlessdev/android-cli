@@ -17,6 +17,7 @@ const commander = require('commander'),
 commander.arguments('<name>')
     .version('0.0.1')
     .option('-g, --generate [name]', 'component (e.g activity, fragment etc..)')
+    .option('-p, --permission [name]', 'add uses-permission to manifest file(e.g INTERNET)')
     .option('--adb-reset', 'kill server adb (required environment variable for ADB_PATH)')
     .action((name: string) => {
 
