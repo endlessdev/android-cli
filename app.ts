@@ -137,7 +137,7 @@ function generateRenderedOutFile(componentType: string, componentName: string, t
     let parsedXMLContent: string = renderAcFile(xmlContent, targetPkg, componentName);
 
     try {
-        fs.writeFileSync(javaFileName, parsedJavaContent);
+        fs.writeFileSync(`./app/src/main/java/${targetPkg.replace(/\./gi, '/')}/${javaFileName}`, parsedJavaContent);
         console.log(chalk.green(`Successful generate ${componentType} ${javaFileName}`))
     } catch (err) {
         console.log(chalk.red(`Failed to generate ${componentType} ${javaFileName}`))
