@@ -14,10 +14,14 @@ const commander = require('commander'),
     xml2js = require('xml2js'),
     changeCase = require('change-case');
 
+let xmlParser = new xml2js.Parser();
+let xmlBuilder = new xml2js.Builder();
+
 commander.arguments('<name>')
     .version('0.0.1')
     .option('-g, --generate [name]', 'component (e.g activity, fragment etc..)')
-    .option('-p, --permission [name]', 'add uses-permission to manifest file(e.g INTERNET)')
+    .option('-p, --permission <permission>', 'add uses-permission to manifest file(e.g INTERNET)')
+    .option('-d, --dependency', 'add ')
     .option('--adb-reset', 'kill server adb (required environment variable for ADB_PATH)')
     .action((name: string) => {
 
@@ -45,12 +49,43 @@ commander.arguments('<name>')
                     });
                 });
             });
-        } else if (commander.permisssion) {
-
         }
     }).parse(process.argv);
 
+if (commander.permission) {
+    console.log(commander.permission);
+    addPermissionToManifest(commander.permission, xml => {
 
+        try {
+            fs.writeFileSync('./app/src/main/AndroidManifest.xml', xml);
+            console.log(chalk.green(`Successful adding permission`));
+        } catch (err) {
+            console.log(chalk.red(`Failed to adding permission`));
+            console.log(chalk.red(err))
+        }
+    });
+}
+
+/**
+ * @desc Add permission to Manfest
+ * 
+ * @param {string} permissionName - To add permission of name
+ */
+function addPermissionToManifest(permissionName: string, callback) {
+    xmlParser.parseString(getManifestContent(), (err, result) => {
+
+        if (!Array.isArray(result.manifest['uses-permission']))
+            result.manifest['uses-permission'] = [];
+
+        result.manifest['uses-permission'].push({
+            '$': {
+                'android:name': `android.permission.${changeCase.upperCase(permissionName)}`
+            }
+        })
+
+        callback(xmlBuilder.buildObject(result));
+    })
+}
 
 /**
  * @desc Parse package name by AndroidManifest.xml
@@ -59,12 +94,14 @@ commander.arguments('<name>')
  */
 function getApplicationPackage(callback) {
     // TODO GET REAL PATH
-    let manifestContent: string = fs.readFileSync('./app/src/main/AndroidManifest.xml');
-    let parser = new xml2js.Parser();
 
-    parser.parseString(manifestContent, (err, result) => {
+    xmlParser.parseString(getManifestContent(), (err, result) => {
         callback(result.manifest.$.package);
     });
+}
+
+function getManifestContent() {
+    return fs.readFileSync('./app/src/main/AndroidManifest.xml');
 }
 
 /**
