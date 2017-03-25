@@ -24,7 +24,6 @@ commander.arguments('<name>')
     .option('-g, --generate [name]', 'component (e.g activity, fragment etc..)')
     .option('-p, --permission <permission>', 'add uses-permission to manifest file(e.g INTERNET)')
     .option('-d, --dependency <dependency>', 'add dependency to build.gradle and sync gradle')
-    .option('--adb-reset', 'kill server adb (required environment variable for ADB_PATH)')
     .action((name: string) => {
 
         let selectedPackage: string;
@@ -73,27 +72,25 @@ if (commander.dependency) {
     let gradlePath: string = "./app/build.gradle";
 
     gjs.parseFile(gradlePath).then((representation) => {
-        console.log(representation);
-        // representation.dependencies.compile.push(`\'${commander.dependency}\'`)
-        // console.log(representation.dependencies.compile);
-        // fs.writeFile(gradlePath, gjs.makeGradleText(representation), function (err) {
-            // if (!err) {
+        representation.dependencies.compile.push(`\'${commander.dependency}\'`)
+        fs.writeFile(gradlePath, gjs.makeGradleText(representation), function (err) {
+            if (!err) {
 
-            //     let gradleSyncCommand: string = "";
+                let gradleSyncCommand: string = "";
 
-            //     if (isWindows())
-            //         gradleSyncCommand = "gradlew.bat build"
-            //     else
-            //         gradleSyncCommand = "./gradlew build"
+                if (isWindows())
+                    gradleSyncCommand = "gradlew.bat build"
+                else
+                    gradleSyncCommand = "./gradlew build"
 
 
-            //     shell.exec(gradleSyncCommand, function (code, stdout, stderr) {
-            //         console.log('Exit code:', code);
-            //         console.log('Program output:', stdout);
-            //         console.log('Program stderr:', stderr);
-            //     })
-            // }
-        // });
+                shell.exec(gradleSyncCommand, function (code, stdout, stderr) {
+                    console.log('Exit code:', code);
+                    console.log('Program output:', stdout);
+                    console.log('Program stderr:', stderr);
+                })
+            }
+        });
     });
 
 }
