@@ -11,44 +11,69 @@ CLI for android applications
 
 ## Usage
 <pre>
-android help
+$acli --help
 </pre>
 
 ### Options
 <pre>
- -h, --help               output usage infls
- ormation
- -V, --version            output the version number
- -g, --generate [name]    component (e.g activity, fragment etc..)
- -p, --permission [name]  add uses-permission to manifest file(e.g INTERNET
- -adb [name]              control adb (required environment variable for ADB_PATH)
+-h, --help                     output usage information
+-V, --version                  output the version number
+-g, --generate [name]          generate component (e.g activity, fragment etc..)
+-p, --permission <permission>  add uses-permission to manifest file(e.g INTERNET)
+-d, --dependency <dependency>  add dependency to build.gradle and sync gradle
 </pre>
 
+## Generate
 
-#### Generating activity
-<pre>
-$android -g activity ACTIVITY_NAME
-</pre>
-**result**
+Generate component (e.g activity, fragment etc..)
 
->Successful generated activity [ACTIVITY_NAME]Activity.java!
+You can find all possible blueprints in the table below
+
+Scaffold  | Usage
+---       | ---
+Activity | `acli -g activity my-new-activity`
+Fragment | `acli -g fragment my-new-fragment`
+LoginActivity    | `acli -g login-acitivty my-new-login-activity`
+TabbedActivity    | `acli -g tabbed-acitivty my-tabbed-activity`
+
+### Result Example
+
+>Successful generated activity [ACTIVITY_NAME]Activity.java!<br>
 >Successful generated activity layout file activity_[ACTIVITY_NAME].xml!
 
-#### Generating fragment
-<pre>
-$android -g fragment FRAGMENT_NAME
-</pre>
-**result**
 
->Successful generated activity [FRAGMENT_NAME]Fragment.java!
->Successful generated activity layout file fragment_[FRAGMENT_NAME].xml!
+## Permission
+add uses-permission to manifest file(e.g INTERNET)
+
+Permission  | Usage
+---       | ---
+INTERNET | `acli -p INTERNET`
+
+### Result Example
+
+> Successful adding permission
+
+## Dependency
+add dependency to build.gradle and sync gradle
+
+<pre>
+$acli -d "com.android.support:cardview-v7:+"
+</pre>
+
+### Result Example
+
+> Successful adding Dependency <br>
+> Syncing gradle.. <run ./gradlew build>
+
 
 ## Milestone
 
+Milestone of this project
+
 - [x] Get packages at java src path by work module
-- [ ] Parse AndroidManifest.xml and for add permission
+- [x] Parse AndroidManifest.xml and for add permission
 - [ ] Connect travis.ci to stick green passing image-!
-- [ ] Deploy this project to NPM (Node Package Manager)
+- [x] Deploy this project to NPM (Node Package Manager)
 
 [npm-url]: https://npmjs.org/package/android-cli
 [npm-image]: https://img.shields.io/npm/v/android-cli.svg?style=flat-square
