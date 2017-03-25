@@ -1,4 +1,4 @@
-# android-cli
+# Android CLI
 
 <img alt="AndroidCLI" src="http://i.imgur.com/3wCVzej.png" width="400" />
 
