@@ -4,7 +4,6 @@
  */
 
 declare function require(name: string);
-
 const commander = require('commander'),
     fs = require('fs'),
     path = require('path'),
@@ -12,7 +11,9 @@ const commander = require('commander'),
     walk = require('walk'),
     inquirer = require('inquirer'),
     xml2js = require('xml2js'),
-    changeCase = require('change-case');
+    changeCase = require('change-case'),
+    gjs = require('gradlejs');
+
 
 let xmlParser = new xml2js.Parser();
 let xmlBuilder = new xml2js.Builder();
@@ -21,7 +22,7 @@ commander.arguments('<name>')
     .version('0.0.1')
     .option('-g, --generate [name]', 'component (e.g activity, fragment etc..)')
     .option('-p, --permission <permission>', 'add uses-permission to manifest file(e.g INTERNET)')
-    .option('-d, --dependency', 'add ')
+    .option('-d, --dependency <dependency>', 'add dependency to build.gradle and sync gradle')
     .option('--adb-reset', 'kill server adb (required environment variable for ADB_PATH)')
     .action((name: string) => {
 
@@ -55,7 +56,6 @@ commander.arguments('<name>')
 if (commander.permission) {
     console.log(commander.permission);
     addPermissionToManifest(commander.permission, xml => {
-
         try {
             fs.writeFileSync('./app/src/main/AndroidManifest.xml', xml);
             console.log(chalk.green(`Successful adding permission`));
@@ -64,6 +64,22 @@ if (commander.permission) {
             console.log(chalk.red(err))
         }
     });
+}
+
+if (commander.dependency) {
+    console.log(commander.dependency);
+
+    let gradlePath: string = "./app/build.gradle";
+
+    gjs.parseFile(gradlePath).then((representation) => {
+        representation.dependencies.compile.push(`\'${commander.dependency}\'`)
+        console.log(representation.dependencies.compile);
+        fs.writeFile(gradlePath, gjs.makeGradleText(representation), function (e, r) {
+            console.log(e, r);
+        });
+    });
+
+
 }
 
 /**
