@@ -4,7 +4,7 @@
 
 
 [![Join Gitter chat][gitter-image]][gitter-url]
-[![Build Status](https://api.travis-ci.org/endlessdev/android-cli.svg?branch=master&style=flat-square)](https://travis-ci.org/endlessdev/android-cli)
+[![Build Status][travis-image]][travis-url]
 [![npm Version][npm-image]][npm-url]
 
 CLI for android applications
@@ -84,3 +84,5 @@ Milestone of this project
 [npm-image]: https://img.shields.io/npm/v/android-cli.svg?style=flat-square
 [gitter-image]: https://img.shields.io/gitter/room/android-cli/android-cli.svg?style=flat-square
 [gitter-url]: https://gitter.im/endlessdev/android-cli?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge?style=flat-square
+[travis-image]:https://img.shields.io/travis/endlessdev/android-cli.svg?branch=master&style=flat-square
+[travis-url]: https://travis-ci.org/endlessdev/android-cli
