@@ -9,6 +9,11 @@
 
 CLI for android applications
 
+## Installation
+<pre>
+$npm install android-cli -global
+</pre>
+
 ## Usage
 <pre>
 $acli --help
