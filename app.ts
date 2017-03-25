@@ -12,7 +12,8 @@ const commander = require('commander'),
     inquirer = require('inquirer'),
     xml2js = require('xml2js'),
     changeCase = require('change-case'),
-    gjs = require('gradlejs');
+    gjs = require('gradlejs'),
+    shell = require('shelljs');
 
 
 let xmlParser = new xml2js.Parser();
@@ -72,13 +73,28 @@ if (commander.dependency) {
     let gradlePath: string = "./app/build.gradle";
 
     gjs.parseFile(gradlePath).then((representation) => {
-        representation.dependencies.compile.push(`\'${commander.dependency}\'`)
-        console.log(representation.dependencies.compile);
-        fs.writeFile(gradlePath, gjs.makeGradleText(representation), function (e, r) {
-            console.log(e, r);
-        });
-    });
+        console.log(representation);
+        // representation.dependencies.compile.push(`\'${commander.dependency}\'`)
+        // console.log(representation.dependencies.compile);
+        // fs.writeFile(gradlePath, gjs.makeGradleText(representation), function (err) {
+            // if (!err) {
 
+            //     let gradleSyncCommand: string = "";
+
+            //     if (isWindows())
+            //         gradleSyncCommand = "gradlew.bat build"
+            //     else
+            //         gradleSyncCommand = "./gradlew build"
+
+
+            //     shell.exec(gradleSyncCommand, function (code, stdout, stderr) {
+            //         console.log('Exit code:', code);
+            //         console.log('Program output:', stdout);
+            //         console.log('Program stderr:', stderr);
+            //     })
+            // }
+        // });
+    });
 
 }
 
@@ -217,4 +233,8 @@ function presentInitialMessage() {
     console.log(chalk.cyan("================================="));
     console.log(chalk.cyan("Welcome to Android CLI TOOL 0.0.1"));
     console.log(chalk.cyan("================================="));
+}
+
+function isWindows() {
+    return /^win/.test(process.platform);
 }
