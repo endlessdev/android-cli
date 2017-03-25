@@ -4,6 +4,10 @@
  */
 
 declare function require(name: string);
+
+let process : any;
+
+
 const commander = require('commander'),
     fs = require('fs'),
     path = require('path'),
