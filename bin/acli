@@ -1,13 +1,17 @@
+#!/usr/bin/env node
+
 /**
  * @author Jade Yeom
  * @email ysw0094@gmail.com
  */
-var commander = require('commander'), fs = require('fs'), path = require('path'), chalk = require('chalk'), walk = require('walk'), inquirer = require('inquirer'), xml2js = require('xml2js'), changeCase = require('change-case');
+var commander = require('commander'), fs = require('fs'), path = require('path'), chalk = require('chalk'), walk = require('walk'), inquirer = require('inquirer'), xml2js = require('xml2js'), changeCase = require('change-case'), gjs = require('gradlejs'), shell = require('shelljs');
+var xmlParser = new xml2js.Parser();
+var xmlBuilder = new xml2js.Builder();
 commander.arguments('<name>')
     .version('0.0.1')
     .option('-g, --generate [name]', 'component (e.g activity, fragment etc..)')
-    .option('-p, --permission [name]', 'add uses-permission to manifest file(e.g INTERNET)')
-    .option('--adb-reset', 'kill server adb (required environment variable for ADB_PATH)')
+    .option('-p, --permission <permission>', 'add uses-permission to manifest file(e.g INTERNET)')
+    .option('-d, --dependency <dependency>', 'add dependency to build.gradle and sync gradle')
     .action(function (name) {
     var selectedPackage;
     var parsedJavaContent;
@@ -31,6 +35,57 @@ commander.arguments('<name>')
         });
     }
 }).parse(process.argv);
+if (commander.permission) {
+    console.log(commander.permission);
+    addPermissionToManifest(commander.permission, function (xml) {
+        try {
+            fs.writeFileSync('./app/src/main/AndroidManifest.xml', xml);
+            console.log(chalk.green("Successful adding permission"));
+        }
+        catch (err) {
+            console.log(chalk.red("Failed to adding permission"));
+            console.log(chalk.red(err));
+        }
+    });
+}
+if (commander.dependency) {
+    console.log(commander.dependency);
+    var gradlePath_1 = "./app/build.gradle";
+    gjs.parseFile(gradlePath_1).then(function (representation) {
+        representation.dependencies.compile.push("'" + commander.dependency + "'");
+        fs.writeFile(gradlePath_1, gjs.makeGradleText(representation), function (err) {
+            if (!err) {
+                var gradleSyncCommand = "";
+                if (isWindows())
+                    gradleSyncCommand = "gradlew.bat build";
+                else
+                    gradleSyncCommand = "./gradlew build";
+                shell.exec(gradleSyncCommand, function (code, stdout, stderr) {
+                    console.log('Exit code:', code);
+                    console.log('Program output:', stdout);
+                    console.log('Program stderr:', stderr);
+                });
+            }
+        });
+    });
+}
+/**
+ * @desc Add permission to Manfest
+ *
+ * @param {string} permissionName - To add permission of name
+ */
+function addPermissionToManifest(permissionName, callback) {
+    xmlParser.parseString(getManifestContent(), function (err, result) {
+        if (!Array.isArray(result.manifest['uses-permission']))
+            result.manifest['uses-permission'] = [];
+        result.manifest['uses-permission'].push({
+            '$': {
+                'android:name': "android.permission." + changeCase.upperCase(permissionName)
+            }
+        });
+        callback(xmlBuilder.buildObject(result));
+    });
+}
 /**
  * @desc Parse package name by AndroidManifest.xml
  *
@@ -38,11 +93,12 @@ commander.arguments('<name>')
  */
 function getApplicationPackage(callback) {
     // TODO GET REAL PATH
-    var manifestContent = fs.readFileSync('./app/src/main/AndroidManifest.xml');
-    var parser = new xml2js.Parser();
-    parser.parseString(manifestContent, function (err, result) {
+    xmlParser.parseString(getManifestContent(), function (err, result) {
         callback(result.manifest.$.package);
     });
+}
+function getManifestContent() {
+    return fs.readFileSync('./app/src/main/AndroidManifest.xml');
 }
 /**
  * @desc Parse package name list by walk module
@@ -113,7 +169,7 @@ function generateRenderedOutFile(componentType, componentName, targetPkg) {
         console.log(chalk.red(err));
     }
     try {
-        fs.writeFileSync("" + xmlFileName /*TODO GET REAL PATH*/, parsedXMLContent);
+        fs.writeFileSync("./app/src/main/res/layout/" + xmlFileName /*TODO GET REAL PATH*/, parsedXMLContent);
         console.log(chalk.green("Successful generate layout file " + xmlFileName));
     }
     catch (err) {
@@ -128,4 +184,7 @@ function presentInitialMessage() {
     console.log(chalk.cyan("================================="));
     console.log(chalk.cyan("Welcome to Android CLI TOOL 0.0.1"));
     console.log(chalk.cyan("================================="));
+}
+function isWindows() {
+    return /^win/.test(process.platform);
 }
