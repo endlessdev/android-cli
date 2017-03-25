@@ -197,8 +197,8 @@ function renderAcFile(fileContent: string, pkgName: string, componentName: strin
 function generateRenderedOutFile(componentType: string, componentName: string, targetPkg: string) {
 
     let boilerplatesPath = `./boilerplates/${componentType}`;
-    let boilerplateNameOfJAVA = `${componentType}.ac.java`
-    let boilerplateNameOfXML = `${componentType}_layout.ac.xml`
+    let boilerplateNameOfJAVA = `${componentType}.ac.src`
+    let boilerplateNameOfXML = `${componentType}_layout.ac.layout`
 
     let javaFileName: string = `${changeCase.pascalCase(componentName)}${changeCase.pascalCase(componentType)}.java`;
     let xmlFileName: string = `${changeCase.lowerCase(componentType)}_${changeCase.lowerCase(componentName)}.xml`;
