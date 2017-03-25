@@ -11,32 +11,34 @@ CLI for android applications
 
 ## Usage
 <pre>
-android help
+$acli --help
 </pre>
 
 ### Options
 <pre>
- -h, --help               output usage infls
- ormation
- -V, --version            output the version number
- -g, --generate [name]    component (e.g activity, fragment etc..)
- -p, --permission [name]  add uses-permission to manifest file(e.g INTERNET
- -adb [name]              control adb (required environment variable for ADB_PATH)
+-h, --help                     output usage information
+-V, --version                  output the version number
+-g, --generate [name]          generate component (e.g activity, fragment etc..)
+-p, --permission <permission>  add uses-permission to manifest file(e.g INTERNET)
+-d, --dependency <dependency>  add dependency to build.gradle and sync gradle
 </pre>
 
+## Generate
 
-#### Generating activity
+generate component (e.g activity, fragment etc..)
+
+### Generating activity
 <pre>
-$android -g activity ACTIVITY_NAME
+$acli -g activity ACTIVITY_NAME
 </pre>
 **result**
 
 >Successful generated activity [ACTIVITY_NAME]Activity.java!
 >Successful generated activity layout file activity_[ACTIVITY_NAME].xml!
 
-#### Generating fragment
+### Generating fragment
 <pre>
-$android -g fragment FRAGMENT_NAME
+$acli -g fragment FRAGMENT_NAME
 </pre>
 **result**
 
