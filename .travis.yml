@@ -1,10 +1,10 @@
 language: node_js
 node_js:
-  - "0.6"
+  - "7"
 before_install:
   - npm i -g typescript typings
   - typings install
-  - tsc
+  - tsc app.js
   - npm install chalk
   - npm install change-case
 branches:
