@@ -83,6 +83,6 @@ Milestone of this project
 [npm-url]: https://npmjs.org/package/android-cli
 [npm-image]: https://img.shields.io/npm/v/android-cli.svg?style=flat-square
 [gitter-image]: https://img.shields.io/gitter/room/android-cli/android-cli.svg?style=flat-square
-[gitter-url]: https://gitter.im/endlessdev/android-cli?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge?style=flat-square
+[gitter-url]: https://gitter.im/android-cli/Lobby?utm_source=share-link&utm_medium=link&utm_campaign=share-link
 [travis-image]:https://img.shields.io/travis/endlessdev/android-cli.svg?branch=master&style=flat-square
 [travis-url]: https://travis-ci.org/endlessdev/android-cli
