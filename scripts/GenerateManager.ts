@@ -1,5 +1,6 @@
 import * as changeCase from "change-case";
 import * as fs from "fs";
+import * as path from "path";
 import {PermissionManager} from "./PermissionManager";
 
 const chalk = require("chalk"),
@@ -25,7 +26,10 @@ export class GenerateManager {
      */
     public generateRenderedOutFile(componentType: string, componentName: string, targetPkg: string) {
 
-        let boilerplatesPath = `./boilerplates/${componentType}`;
+        console.log(process.argv[1]);
+
+        //TODO GET REAL BOILERPLATES PATH
+        let boilerplatesPath = `../../boilerplates/${componentType}`;
         let boilerplateNameOfJAVA = `index.ac.src`;
         let boilerplateNameOfXML = `index.ac.layout`;
 
