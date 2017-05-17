@@ -1,13 +1,13 @@
 import {MANIFAST_PATH} from "./constants/ManifestPath";
-import * as xml2js from "xml2js";
 import * as changeCase from "change-case";
 import * as fs from "fs";
 
+const xml2js = require('xml2js');
 
 export class PermissionManager {
 
-    private xmlParser: xml2js.Parser;
-    private xmlBuilder: xml2js.Builder;
+    private xmlParser;
+    private xmlBuilder;
 
     constructor() {
         this.xmlBuilder = new xml2js.Builder();
@@ -15,13 +15,13 @@ export class PermissionManager {
     }
 
     /**
-     * @desc Add permission to Manfest
+     * @desc Add permission to Manifest
      *
      * @param {string} permissionName - To add permission of name
      * @param callback
      */
     public addPermissionToManifest(permissionName: string, callback) {
-        this.xmlParser.parseString(this.getManifestContent(), (err, result) => {
+        this.xmlParser.parseString(PermissionManager.getManifestContent(), (err, result) => {
             if (!Array.isArray(result.manifest['uses-permission']))
                 result.manifest['uses-permission'] = [];
 
@@ -34,8 +34,22 @@ export class PermissionManager {
         })
     }
 
-    private getManifestContent() {
+    public static getManifestContent() {
         return fs.readFileSync(MANIFAST_PATH);
     }
+
+    /**
+     * @desc Parse package name by AndroidManifest.xml
+     *
+     * @param {function} callback - Call anonymous function when complete xml parse
+     */
+    public getApplicationPackage(callback) {
+        // TODO GET REAL PATH
+
+        this.xmlParser.parseString(PermissionManager.getManifestContent(), (err, result) => {
+            callback(result.manifest.$.package);
+        });
+    }
+
 
 }

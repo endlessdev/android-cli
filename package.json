@@ -2,7 +2,7 @@
   "name": "android-cli",
   "version": "1.0.0",
   "description": "<p align=\"center\"> <img alt=\"AndroidCLI\" src=\"http://i.imgur.com/3wCVzej.png\" width=\"400\" />",
-  "main": "entry.js",
+  "main": "./bin/acli",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
