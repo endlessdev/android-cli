@@ -1,11 +1,11 @@
-# Android CLI
-
+<p align="center">
 <img alt="AndroidCLI" src="http://i.imgur.com/3wCVzej.png" width="400" />
-
 
 [![Join Gitter chat][gitter-image]][gitter-url]
 [![Build Status][travis-image]][travis-url]
 [![npm Version][npm-image]][npm-url]
+
+</p>
 
 CLI for android applications
 
