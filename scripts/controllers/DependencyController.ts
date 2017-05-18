@@ -1,10 +1,11 @@
-import {GRADLE_PATH} from "./constants/GradlePath";
+import {GRADLE_PATH} from "../constants/GradlePath";
 import * as fs from "fs";
 import * as shell from "shelljs";
+import {Controller} from "./Controller";
 
 // const gradle = require('gradlejs');
 
-export class DependencyManager {
+export class DependencyController extends Controller{
 
     public addDependency(dependency: string, callback) {
         //TODO FIX BUG GRADLE PARSE
@@ -15,7 +16,7 @@ export class DependencyManager {
                     let gradleSyncCommand: string = "";
                     const gradleOption: string = "clean build assemble";
 
-                    if (DependencyManager.isWindows())
+                    if (DependencyController.isWindows())
                         gradleSyncCommand = `gradlew.bat ${gradleOption}`;
                     else
                         gradleSyncCommand = `./gradlew ${gradleOption}`;
