@@ -1,12 +1,13 @@
 import * as changeCase from "change-case";
 import * as fs from "fs";
+import * as path from "path";
+import {TemplateRequest} from "../utils/TemplateRequest";
 
 const chalk = require("chalk"),
     commander = require("commander"),
     walk = require('walk');
 
 export class GenerateController {
-
 
     /**
      * @desc Generate rendered out file
@@ -15,20 +16,15 @@ export class GenerateController {
      * @param {string} componentName - Name of component
      * @param {string} targetPkg - Targeted package name
      */
-    public generateRenderedOutFile(componentType: string, componentName: string, targetPkg: string) {
+    public async generateRenderedOutFile(componentType: string, componentName: string, targetPkg: string) {
 
-        console.log(process.argv[1]);
-
-        //TODO GET REAL BOILERPLATES PATH
-        const boilerplatesPath = `../../boilerplates/${componentType}`,
-            boilerplateNameOfJAVA = `index.ac.src`,
-            boilerplateNameOfXML = `index.ac.layout`,
-
-            javaFileName: string = `${changeCase.pascalCase(componentName)}${changeCase.pascalCase(componentType)}.java`,
+        const javaFileName: string = `${changeCase.pascalCase(componentName)}${changeCase.pascalCase(componentType)}.java`,
             xmlFileName: string = `${changeCase.lowerCase(componentType)}_${changeCase.lowerCase(componentName)}.xml`,
 
-            javaContent: string = fs.readFileSync(`${boilerplatesPath}/${boilerplateNameOfJAVA}`, 'utf-8').toString(),
-            xmlContent: string = fs.readFileSync(`${boilerplatesPath}/${boilerplateNameOfXML}`, 'utf-8').toString(),
+            templates : any = await TemplateRequest.getTemplateContents(componentType),
+
+            javaContent: string = templates.src,
+            xmlContent: string = templates.layout,
 
             parsedJavaContent: string = this.renderAcFile(javaContent, targetPkg, componentName),
             parsedXMLContent: string = this.renderAcFile(xmlContent, targetPkg, componentName);

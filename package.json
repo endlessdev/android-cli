@@ -31,7 +31,9 @@
     "inquirer": "^3.0.6",
     "node": "0.0.0",
     "shelljs": "^0.7.7",
+    "ts-loader": "^2.0.3",
     "walk": "^2.3.9",
+    "winston": "^2.3.1",
     "xml2js": "^0.4.17"
   },
   "devDependencies": {
