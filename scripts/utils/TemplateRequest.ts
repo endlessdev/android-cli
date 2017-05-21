@@ -14,12 +14,12 @@ export class TemplateRequest {
         const srcBody = await TemplateRequest.getContentFromURL(SRC_ENDPOINT);
         const layoutBody = await TemplateRequest.getContentFromURL(LAYOUT_ENDPOINT);
 
-        return  {src: srcBody, layout: layoutBody};
+        return {src: srcBody, layout: layoutBody};
     }
 
     public static async getContentFromURL(requestURL: string) {
-        return new Promise(function (resolve, reject) {
-            request(requestURL, function (error, res, body) {
+        return new Promise((resolve, reject) => {
+            request(requestURL, (error, res, body) => {
                 if (!error && res.statusCode == 200) {
                     resolve(body);
                 } else {
