@@ -4,7 +4,7 @@ module.exports = {
         'entry' : './app.ts'
     },
     output : {
-        filename : './libs/android-cli.js'
+        filename : './libs/android-cli'
     },resolve: {
         // Add `.ts` and `.tsx` as a resolvable extension.
         extensions: ['.ts', '.tsx', '.js'] // note if using webpack 1 you'd also need a '' in the array as well
