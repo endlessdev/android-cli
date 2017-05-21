@@ -3,7 +3,7 @@ import * as inquirer from "inquirer";
 import * as fs from "fs";
 import {PermissionController} from "./scripts/controllers/PermissionController";
 import {GenerateController} from "./scripts/controllers/GenerateController";
-import {MANIFAST_PATH} from "./scripts/constants/ManifestPath";
+import {MANIFEST_PATH} from "./scripts/constants/ManifestPath";
 import {DependencyController} from "./scripts/controllers/DependencyController";
 import {PackageManager} from "./scripts/utils/PackageManager";
 // import * as pkg from "./scripts/constants/Package";
@@ -45,7 +45,7 @@ if (commander.permission) {
     const permissionController: PermissionController = new PermissionController();
     permissionController.addPermissionToManifest(commander.permission, xml => {
         try {
-            fs.writeFileSync(MANIFAST_PATH, xml);
+            fs.writeFileSync(MANIFEST_PATH, xml);
             console.log(chalk.green(`Successful adding permission`));
         } catch (err) {
             console.log(chalk.red(`Failed to adding permission`));
