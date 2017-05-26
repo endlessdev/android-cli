@@ -1,11 +1,8 @@
-<p align="center">
 <img alt="AndroidCLI" src="http://i.imgur.com/3wCVzej.png" width="400" />
 
 [![Join Gitter chat][gitter-image]][gitter-url]
 [![Build Status][travis-image]][travis-url]
 [![npm Version][npm-image]][npm-url]
-
-</p>
 
 CLI for android applications
 
@@ -40,6 +37,10 @@ Activity | `acli -g activity my-new-activity`
 Fragment | `acli -g fragment my-new-fragment`
 LoginActivity    | `acli -g login-acitivty my-new-login-activity`
 TabbedActivity    | `acli -g tabbed-acitivty my-tabbed-activity`
+FullScreenActivity    | `acli -g tabbed-acitivty my-fullscreen-activity`
+ScrollingActivity    | `acli -g tabbed-acitivty my-scrolling-activity`
+
+If you contribute for other blueprints, please PR to [this repository](https://github.com/endlessdev/android-cli-templates)
 
 ### Result Example
 
@@ -58,7 +59,7 @@ INTERNET | `acli -p INTERNET`
 
 > Successful adding permission
 
-## Dependency
+## Dependency (In Progress)
 add dependency to build.gradle and sync gradle
 
 <pre>
