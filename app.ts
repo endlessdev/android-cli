@@ -8,7 +8,6 @@ import {DependencyController} from "./scripts/controllers/DependencyController";
 import {PackageManager} from "./scripts/utils/PackageManager";
 // import * as pkg from "./scripts/constants/Package";
 
-
 const chalk = require('chalk'),
     figlet = require('figlet'),
     commander = require('commander'),
