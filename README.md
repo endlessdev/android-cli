@@ -37,8 +37,8 @@ Activity | `acli -g activity my-new-activity`
 Fragment | `acli -g fragment my-new-fragment`
 LoginActivity    | `acli -g login-acitivty my-new-login-activity`
 TabbedActivity    | `acli -g tabbed-acitivty my-tabbed-activity`
-FullScreenActivity    | `acli -g tabbed-acitivty my-fullscreen-activity`
-ScrollingActivity    | `acli -g tabbed-acitivty my-scrolling-activity`
+FullScreenActivity    | `acli -g fullscreen-activity my-fullscreen-activity`
+ScrollingActivity    | `acli -g scrolling-acitivty my-scrolling-activity`
 
 If you contribute for other blueprints, please PR to [this repository](https://github.com/endlessdev/android-cli-templates)
 
