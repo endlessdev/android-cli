@@ -1,7 +1,5 @@
 import {GITHUB_CDN_ENDPOINT} from "../constants/APIEndpoint";
-
-const request = require("request");
-
+import * as rp from 'request-promise';
 
 export class TemplateRequest {
 
@@ -11,21 +9,9 @@ export class TemplateRequest {
             SRC_ENDPOINT = `${BASE_URL}/index.ac.src`,
             LAYOUT_ENDPOINT = `${BASE_URL}/index.ac.layout`;
 
-        const srcBody = await TemplateRequest.getContentFromURL(SRC_ENDPOINT);
-        const layoutBody = await TemplateRequest.getContentFromURL(LAYOUT_ENDPOINT);
+        const srcBody = await rp(SRC_ENDPOINT);
+        const layoutBody = await rp(LAYOUT_ENDPOINT);
 
         return {src: srcBody, layout: layoutBody};
-    }
-
-    public static async getContentFromURL(requestURL: string) {
-        return new Promise((resolve, reject) => {
-            request(requestURL, (error, res, body) => {
-                if (!error && res.statusCode == 200) {
-                    resolve(body);
-                } else {
-                    reject(error);
-                }
-            });
-        });
     }
 }
